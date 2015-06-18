@@ -308,17 +308,17 @@ class Util {
     protected static function getShortPath($path) {
 
         $path = str_replace('\\', '/', $path);
-        //$w = explode(' ', $path);
-        //$last = $w[count($w)-1];
         $doc_root = $_SERVER['DOCUMENT_ROOT'];  //C:/xampp/htdocs/movies13/public
-        $pos = strpos($doc_root, '/public');
+        ///Users/orion/Public/htdocs/rest_api_img
+
+        $pos = strpos($doc_root, '/htdocs');
         if ($pos === false)
             return $path;
 
-        $app_root = substr($doc_root, 0, $pos) . '/app'; //C:/xampp/htdocs/movies13/app
+        //$app_root = substr($doc_root, 0, $pos) . '/app'; //C:/xampp/htdocs/movies13/app
         //error_log('app_root=$' . $app_root);
 
-        return str_replace($app_root, '_APP_', $path);
+        return str_replace($doc_root, '_IMG_', $path);
     }
 
     /**

@@ -323,7 +323,7 @@ class Img_Model {
 
     public function saveAfbeelding($path, $id) {
         if (empty($path) || $path === 'undefined') {
-            Util::debug_log('undefined path for id=' . $id);
+            //Util::debug_log('undefined path for id=' . $id);
             return;
         }
         if (!$id) {

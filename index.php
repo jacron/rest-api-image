@@ -27,7 +27,7 @@ if (isset($ini['common'])) {
 if (!array_key_exists('HTTP_ORIGIN', $_SERVER)) {
     $_SERVER['HTTP_ORIGIN'] = $_SERVER['SERVER_NAME'];
 }
-
+//Util::debug_log($_SERVER['DOCUMENT_ROOT']);
 try {
     $API = new afbApi($_SERVER['REQUEST_URI'], $_SERVER['HTTP_ORIGIN']);
     echo $API->processAPI();
