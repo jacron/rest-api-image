@@ -15,10 +15,8 @@ class Img_Model {
 
     private $afbeeldingendir;// = 'S:\Pictures\Movies'; //'C:\xampp\htdocs\saturnus\Pictures\Movies';
 
-    /**
+    /*
      * Afbeeldingenpad zonder einde slash
-     * @global type $settings
-     * @return type
      */
     protected function getAfbeeldingenDir() {
         global $settings;
@@ -40,7 +38,7 @@ class Img_Model {
         return $folderBySize;
     }
 
-    /**
+    /*
      * Als een dimensie weggelaten is, bereken die dan naar rato van de andere.
      * @param type $srcW
      * @param type $srcH
@@ -157,7 +155,7 @@ class Img_Model {
         $src = $this->imageCreate($path);   //imagecreatefromjpeg($path);
         if (!$src) {
             Util::debug_log($path);
-            return;
+            return null;
         }
         $dim = $this->getScaledDimensions(
             imagesx($src), imagesy($src),
@@ -230,6 +228,7 @@ class Img_Model {
             //Util::debug_log('empty path for image');
             return null;
         }
+        //Util::debug_log($path);
 
         switch($ext) {
             case 'jpg':
@@ -321,6 +320,14 @@ class Img_Model {
         }
     }
 
+    private function debug_https() {
+        $w = stream_get_wrappers();
+        Util::debug_log('openssl: '.  extension_loaded  ('openssl') ? 'yes':'no');
+        Util::debug_log('http wrapper: '. in_array('http', $w) ? 'yes':'no');
+        Util::debug_log('https wrapper: '. in_array('https', $w) ? 'yes':'no');
+        Util::debug_log('wrappers: '. var_export($w));
+    }
+
     public function saveAfbeelding($path, $id) {
         if (empty($path) || $path === 'undefined') {
             //Util::debug_log('undefined path for id=' . $id);
@@ -334,20 +341,29 @@ class Img_Model {
         $npath = Util::stripQueryString(str_replace(' ', '%20', $path));
         $ext = strtolower(pathinfo($npath, PATHINFO_EXTENSION));
         //Util::debug_log($npath);
-        $fileName = $this->afbeeldingendir . '/' . $id . '.' . $ext; //'.jpg';
+//        debug_https();
+        $ch = curl_init();
+        curl_setopt ($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_URL, $npath);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $file = curl_exec($ch);
+        curl_close($ch);
+
+        /*
         $file = file_get_contents($npath);
         if (!$file){
-            Util:: debug_log('Niet opgehaald: ' . $npath);
+            Util::debug_log('Niet opgehaald: ' . $npath);
         }
         else {
             $this->deleteScaledPics($id);
         }
+        */
         //Util::debug_log(count($file));
+
+        $fileName = $this->afbeeldingendir . '/' . $id . '.' . $ext; //'.jpg';
         Util::debug_log($fileName);
-
         file_put_contents($fileName, $file);
-
-        //Util::debug_log('image saved');// na 10 sec.
     }
 /*
     public function moveAfbeelding($tmp_name, $id, $extension) {

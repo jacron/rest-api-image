@@ -43,7 +43,7 @@ abstract class API {
         header("Access-Control-Allow-Orgin: *");
         header("Access-Control-Allow-Methods: *");
         header("Content-Type: application/json");
-
+Util::debug_log($request);
         $args = explode('/', trim($request, '/'));
         $this->endpoint = $args[0];
         $this->args = array_slice($args, 1);

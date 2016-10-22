@@ -306,6 +306,7 @@ class Util {
     }
 
     protected static function getShortPath($path) {
+//return $path;
 
         $path = str_replace('\\', '/', $path);
         $doc_root = $_SERVER['DOCUMENT_ROOT'];  //C:/xampp/htdocs/movies13/public
@@ -321,6 +322,10 @@ class Util {
         return str_replace($doc_root, '_IMG_', $path);
     }
 
+    protected static function log($msg) {
+        file_put_contents("rest_api_img.debug.log", $msg . PHP_EOL, FILE_APPEND);
+    }
+
     /**
      * Print array to debug log.
      * @param array $arr
@@ -332,7 +337,7 @@ class Util {
         $backtrace = debug_backtrace();
         $trace = $backtrace[0];
         $file = self::getShortPath($trace['file']);
-        error_log($file . '::' . $trace['line'] . '::' . print_r($arr, true));
+        self::log($file . '::' . $trace['line'] . '::' . print_r($arr, true));
     }
 
     public static function getToday() {
