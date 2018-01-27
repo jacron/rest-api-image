@@ -154,7 +154,7 @@ class Img_Model {
         // Maak nieuw in cache en geef deze terug.
         $src = $this->imageCreate($path);   //imagecreatefromjpeg($path);
         if (!$src) {
-            Util::debug_log($path);
+//            Util::debug_log($path);
             return null;
         }
         $dim = $this->getScaledDimensions(
@@ -342,6 +342,7 @@ class Img_Model {
         $ext = strtolower(pathinfo($npath, PATHINFO_EXTENSION));
         //Util::debug_log($npath);
 //        debug_https();
+        /*
         $ch = curl_init();
         curl_setopt ($ch, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, 0);
@@ -349,8 +350,7 @@ class Img_Model {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         $file = curl_exec($ch);
         curl_close($ch);
-
-        /*
+*/
         $file = file_get_contents($npath);
         if (!$file){
             Util::debug_log('Niet opgehaald: ' . $npath);
@@ -358,11 +358,10 @@ class Img_Model {
         else {
             $this->deleteScaledPics($id);
         }
-        */
         //Util::debug_log(count($file));
 
         $fileName = $this->afbeeldingendir . '/' . $id . '.' . $ext; //'.jpg';
-        Util::debug_log($fileName);
+//        Util::debug_log($fileName);
         file_put_contents($fileName, $file);
     }
 /*
